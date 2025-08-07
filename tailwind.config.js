@@ -11,7 +11,8 @@ export default {
         'mainYellow':'#EDA415',
         'white':'#fff',
         'lightBlue':'#E2F4FF',
-        'skyBlue':'#87BCD9'
+        'skyBlue':'#87BCD9',
+        'textColor': '#292D32',
       }
     },
   },
