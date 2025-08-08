@@ -16,6 +16,7 @@ import store from "./store/store.js";
 
 // Pages
 import HomePage from "./pages/HomePage.jsx";
+import SingleProductPage from "./pages/SingleProductPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/product/:id",
+        element: <SingleProductPage />,
       },
     ],
   },

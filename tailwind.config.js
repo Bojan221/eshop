@@ -13,6 +13,7 @@ export default {
         'lightBlue':'#E2F4FF',
         'skyBlue':'#87BCD9',
         'textColor': '#292D32',
+        'greyColor': '#B6B6B6',
       }
     },
   },
