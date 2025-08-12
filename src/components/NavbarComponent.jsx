@@ -58,7 +58,7 @@ function NavbarComponent() {
             <div className="bg-mainYellow rounded-full w-[20px] h-[20px] flex justify-center items-center text-[12px]">
               0
             </div>
-            <p>Cart</p>
+            <Link to={"/cart"}>Cart</Link>
           </div>
         </div>
       </div>

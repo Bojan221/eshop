@@ -21,7 +21,7 @@ function SingleProductComponent({ product }) {
       />
       <Link
         to={`/product/${product.id}`}
-        className="bg-mainBlue text-white py-[12px] px-[40px] rounded-[25px] my-[20px]"
+        className="bg-mainBlue text-white py-[12px] px-[40px] rounded-[25px] my-[20px] hover:bg-mainYellow transition-all duration-200"
       >
         View more
       </Link>

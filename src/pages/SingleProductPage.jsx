@@ -5,15 +5,17 @@ import { Rating } from "@mui/material";
 import { FaCheck, FaTruck } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
-
-
-
+import { useDispatch } from "react-redux";
+import { addProductToCartAction } from "../store/cartSlice";
 function SingleProductPage() {
   const { id } = useParams();
   const [singleProduct, setSingleProduct] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     ProductService.getSingleProduct(id)
@@ -36,9 +38,15 @@ function SingleProductPage() {
     }
   }
 
+  function addToCart() {
+    dispatch(addProductToCartAction(singleProduct));
+    setIsAdded(true);
+    
+  }
+
   return isLoading ? (
-    <div className="flex w-[90%] mx-auto my-[50px] gap-[20px]">
-      <div className="w-[50%] flex flex-col gap-[20px]">
+    <div className="flex flex-col w-[90%] mx-auto my-[50px] gap-[20px] md:flex-row">
+      <div className="md:w-[50%] flex flex-col gap-[20px]">
         <img
           src={singleProduct.images[currentImage]}
           alt="thumbnail"
@@ -51,7 +59,7 @@ function SingleProductPage() {
                 src={image}
                 alt="image"
                 key={index}
-                className={`h-[150px] w-[170px] border ${
+                className={`h-[90px] xl:h-[140px] w-[100px] xl:w-[160px] border ${
                   currentImage === index
                     ? "border-mainBlue"
                     : "border-greyColor"
@@ -62,7 +70,7 @@ function SingleProductPage() {
           })}
         </div>
       </div>
-      <div className="flex flex-col justify-center gap-[20px]">
+      <div className="flex flex-col justify-start gap-[20px]">
         <h1 className="text-[24px] lg:text-[36px] text-mainBlue font-semibold">{singleProduct.title}</h1>
         <h3 className="text-[16px] lg:text-[24px] text-gray-800 font-semibold">${singleProduct.price}</h3>
         <Rating
@@ -117,8 +125,8 @@ function SingleProductPage() {
         </div>
 
         <div className="flex gap-[20px] items-center">
-          <button className="px-[50px] py-[15px] bg-mainYellow text-white font-bold rounded-[25px] cursor-pointer">Add to cart</button>
-          <CiHeart size={50} className="cursor-pointer p-[10px] rounded-full bg-slate-300"/>
+          {isAdded ? <button className="flex items-center justify-center px-[50px] py-[15px] bg-mainYellow font-bold rounded-[25px] transition-all duration-200 gap-[5px] text-green-600" disabled> <FaCheck color="#16A34A"/> Added</button> : <button className="px-[50px] py-[15px] bg-mainYellow text-white font-bold rounded-[25px] cursor-pointer hover:bg-mainBlue transition-all duration-200" onClick={addToCart}>Add to cart</button>}
+          <CiHeart size={50} className="cursor-pointer p-[10px] rounded-full bg-slate-300 hover:fill-red-600"/>
         </div>
 
         <hr />

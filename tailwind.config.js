@@ -14,6 +14,7 @@ export default {
         'skyBlue':'#87BCD9',
         'textColor': '#292D32',
         'greyColor': '#B6B6B6',
+        'cartBackground':'#E2F4FF',
       }
     },
   },

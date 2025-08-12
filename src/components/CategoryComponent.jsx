@@ -1,9 +1,14 @@
 import React from "react";
-import CategoryService from "../services/categoryService";
+import CategoryService from "../services/CategoryService";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { saveProductsByCategoryAction } from "../store/productSlice";
 function CategoryComponent() {
   const [allCategory, setAllCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch()
+
   useEffect(() => {
     CategoryService.getCategoryList()
       .then((res) => {
@@ -11,6 +16,12 @@ function CategoryComponent() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const handleCategory = (category) => {
+    CategoryService.getProductByCategory(category)
+    .then(res => dispatch(saveProductsByCategoryAction(res.data.products)))
+    .catch(err => console.log(err))
+  };
 
   return (
     <div className="bg-gray-100">
@@ -28,6 +39,7 @@ function CategoryComponent() {
               <li
                 className="bg-mainBlue text-white text-center py-[12px] px-[40px] cursor-pointer hover:bg-mainYellow transition-all duration-250 flex items-center justify-center"
                 key={index}
+                onClick={() => handleCategory(category)}
               >
                 {category}
               </li>

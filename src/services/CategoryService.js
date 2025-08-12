@@ -4,6 +4,9 @@ class CategoryService {
   static getCategoryList() {
     return axios.get("products/category-list");
   }
+  static getProductByCategory(category) {
+    return axios.get(`products/category/${category}`)
+  }
 }
 
 export default CategoryService;

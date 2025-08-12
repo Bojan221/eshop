@@ -11,8 +11,12 @@ const productSlice = createSlice({
       state.allProducts = action.payload;
       state.isLoading = true;
     },
+    saveProductsByCategoryAction : (state, action) => {
+      state.allProducts = action.payload;
+      state.isLoading = true;
+    }
   },
 });
 
-export const { saveAllProductsAction } = productSlice.actions;
+export const { saveAllProductsAction, saveProductsByCategoryAction } = productSlice.actions;
 export default productSlice.reducer;
