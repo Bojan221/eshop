@@ -5,10 +5,14 @@ import { Rating } from "@mui/material";
 import { FaCheck, FaTruck } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
-import { useDispatch } from "react-redux";
+import { IoHeart } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
 import { addProductToCartAction } from "../store/cartSlice";
+import { updateFavoriteAction } from "../store/favoriteSlice";
+
 function SingleProductPage() {
   const { id } = useParams();
+  const { allFavorites } = useSelector((state) => state.favoriteStore);
   const [singleProduct, setSingleProduct] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
@@ -16,6 +20,9 @@ function SingleProductPage() {
   const [isAdded, setIsAdded] = useState(false);
 
   const dispatch = useDispatch();
+
+  const isFavorite = allFavorites.some((favorite) => favorite.id === singleProduct.id);
+
 
   useEffect(() => {
     ProductService.getSingleProduct(id)
@@ -41,7 +48,6 @@ function SingleProductPage() {
   function addToCart() {
     dispatch(addProductToCartAction(singleProduct));
     setIsAdded(true);
-    
   }
 
   return isLoading ? (
@@ -71,8 +77,12 @@ function SingleProductPage() {
         </div>
       </div>
       <div className="flex flex-col justify-start gap-[20px]">
-        <h1 className="text-[24px] lg:text-[36px] text-mainBlue font-semibold">{singleProduct.title}</h1>
-        <h3 className="text-[16px] lg:text-[24px] text-gray-800 font-semibold">${singleProduct.price}</h3>
+        <h1 className="text-[24px] lg:text-[36px] text-mainBlue font-semibold">
+          {singleProduct.title}
+        </h1>
+        <h3 className="text-[16px] lg:text-[24px] text-gray-800 font-semibold">
+          ${singleProduct.price}
+        </h3>
         <Rating
           name="half-rating-read"
           value={singleProduct.rating}
@@ -92,16 +102,23 @@ function SingleProductPage() {
           )}
         </div>
         <p className="text-slate-600">
-          Hurry up! Only 
+          Hurry up! Only
           <span className="font-bold text-[#6c47ff]">
-            {" "}{singleProduct.stock}{" "}
+            {" "}
+            {singleProduct.stock}{" "}
           </span>
-           product left in stock!
+          product left in stock!
         </p>
 
-        <ul className="flex gap-[10px] items-center text-slate-600"> Tags:
+        <ul className="flex gap-[10px] items-center text-slate-600">
+          {" "}
+          Tags:
           {singleProduct.tags.map((tag, index) => {
-            return <li key={index} className="text-[#525154] bg-slate-300 py-1 px-2">#{tag}</li>
+            return (
+              <li key={index} className="text-[#525154] bg-slate-300 py-1 px-2">
+                #{tag}
+              </li>
+            );
           })}
         </ul>
 
@@ -125,13 +142,42 @@ function SingleProductPage() {
         </div>
 
         <div className="flex gap-[20px] items-center">
-          {isAdded ? <button className="flex items-center justify-center px-[50px] py-[15px] bg-mainYellow font-bold rounded-[25px] transition-all duration-200 gap-[5px] text-green-600" disabled> <FaCheck color="#16A34A"/> Added</button> : <button className="px-[50px] py-[15px] bg-mainYellow text-white font-bold rounded-[25px] cursor-pointer hover:bg-mainBlue transition-all duration-200" onClick={addToCart}>Add to cart</button>}
-          <CiHeart size={50} className="cursor-pointer p-[10px] rounded-full bg-slate-300 hover:fill-red-600"/>
+          {isAdded ? (
+            <button
+              className="flex items-center justify-center px-[50px] py-[15px] bg-mainYellow font-bold rounded-[25px] transition-all duration-200 gap-[5px] text-green-600"
+              disabled
+            >
+              {" "}
+              <FaCheck color="#16A34A" /> Added
+            </button>
+          ) : (
+            <button
+              className="px-[50px] py-[15px] bg-mainYellow text-white font-bold rounded-[25px] cursor-pointer hover:bg-mainBlue transition-all duration-200"
+              onClick={addToCart}
+            >
+              Add to cart
+            </button>
+          )}
+          {isFavorite ? (
+            <IoHeart
+              size={50}
+              className="cursor-pointer p-[10px] rounded-full bg-slate-300 fill-red-600"
+              onClick={() => dispatch(updateFavoriteAction(singleProduct))}
+            />
+          ) : (
+             <CiHeart
+              size={50}
+              className="cursor-pointer p-[10px] rounded-full bg-slate-300 hover:fill-red-600"
+              onClick={() => dispatch(updateFavoriteAction(singleProduct))}
+            />
+          )}
         </div>
 
         <hr />
 
-        <p className="flex items-center gap-[15px]"><FaTruck size={15}/> <span>{singleProduct.shippingInformation}</span></p>
+        <p className="flex items-center gap-[15px]">
+          <FaTruck size={15} /> <span>{singleProduct.shippingInformation}</span>
+        </p>
       </div>
     </div>
   ) : (

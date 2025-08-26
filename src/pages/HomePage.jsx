@@ -3,6 +3,8 @@ import ProductService from "../services/ProductService";
 import { useDispatch, useSelector } from "react-redux";
 import { saveAllProductsAction } from "../store/productSlice";
 import SingleProductComponent from "../components/SingleProductComponent";
+import CategoryComponent from "../components/CategoryComponent.jsx";
+
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -18,6 +20,8 @@ function HomePage() {
   }, []);
 
   return (
+    <div>
+            <CategoryComponent />
     <div className="py-[50px]">
       {isLoading ? (
         <div className="w-[90%] mx-auto flex flex-wrap gap-[30px] items-center justify-center">
@@ -28,6 +32,7 @@ function HomePage() {
       ) : (
         <h1>Loading....</h1>
       )}
+    </div>
     </div>
   );
 }

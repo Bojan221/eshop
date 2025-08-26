@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.svg";
 import { CiHeart, CiShoppingCart } from "react-icons/ci";
 import { IoPersonOutline } from "react-icons/io5";
@@ -11,8 +11,29 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 
 function NavbarComponent() {
+
+  const[totalFI, setTotalFI] = useState(0);
+  const {totalFavorites} = useSelector((state) => state.favoriteStore);
+  
+  const [countProductsCart, setCountProductsCart] = useState(0)
+  const {countProducts} = useSelector((state) => state.cartStore);
+
+  useEffect(() => {
+    if(localStorage.getItem('countProducts')) {
+      setCountProductsCart(JSON.parse(localStorage.getItem('countProducts')));
+    } else { 
+      setCountProductsCart(0)
+    }
+  },[countProducts])
+
+  useEffect(()=> {
+    setTotalFI(JSON.parse(localStorage.getItem('totalFavorites')));
+  },[totalFavorites])
+
   return (
     <div className="bg-mainBlue py-[15px]">
       <div className="w-[90%] mx-auto flex flex-col justify-between items-center gap-[20px] lg:flex-row">
@@ -49,14 +70,14 @@ function NavbarComponent() {
           <div className="flex justify-between items-center gap-2 text-[14px] text-white">
             <CiHeart size={18} />
             <div className="bg-mainYellow rounded-full w-[20px] h-[20px] flex justify-center items-center text-[12px]">
-              0
+              {totalFavorites}
             </div>
-            <p>Favorite</p>
+            <Link to={"/favorite"}>Favorite</Link>
           </div>
           <div className="flex justify-between items-center gap-2 text-[14px] text-white">
             <CiShoppingCart size={18} />
             <div className="bg-mainYellow rounded-full w-[20px] h-[20px] flex justify-center items-center text-[12px]">
-              0
+              {countProductsCart}
             </div>
             <Link to={"/cart"}>Cart</Link>
           </div>
