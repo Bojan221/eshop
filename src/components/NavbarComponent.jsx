@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.svg";
 import { CiHeart, CiShoppingCart } from "react-icons/ci";
 import { IoPersonOutline } from "react-icons/io5";
-
+import { saveAllProductsAction, saveProductBySearchAction } from "../store/productSlice";
 import {
   SignedIn,
   SignedOut,
@@ -11,13 +11,19 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ProductService from "../services/ProductService";
 
 
 function NavbarComponent() {
 
+  const dispatch = useDispatch();
+
   const[totalFI, setTotalFI] = useState(0);
   const {totalFavorites} = useSelector((state) => state.favoriteStore);
+  
+  const [searchValue, setSearchValue] = useState("");
+  const {allProducts, searchProduct} = useSelector((state) => state.productStore);
   
   const [countProductsCart, setCountProductsCart] = useState(0)
   const {countProducts} = useSelector((state) => state.cartStore);
@@ -34,6 +40,21 @@ function NavbarComponent() {
     setTotalFI(JSON.parse(localStorage.getItem('totalFavorites')));
   },[totalFavorites])
 
+  const handleSearch = () => {
+    dispatch(saveProductBySearchAction(searchValue));
+    setSearchValue('');
+  }
+
+  useEffect(() => {
+    if(searchProduct) {
+      ProductService.getProductBySearch(searchProduct)
+      .then((res) => dispatch(saveAllProductsAction(res.data.products)))
+      .catch((err) => console.log(err))
+    } else  {
+
+    }
+   }, [searchProduct])
+
   return (
     <div className="bg-mainBlue py-[15px]">
       <div className="w-[90%] mx-auto flex flex-col justify-between items-center gap-[20px] lg:flex-row">
@@ -46,8 +67,10 @@ function NavbarComponent() {
               type="text"
               className="py-[10px] px-[20px] rounded-[25px]"
               placeholder="Search"
+              value={searchValue} 
+              onChange={(e) => setSearchValue(e.target.value)}
             />
-            <button className="bg-mainYellow text-white py-[12px] px-[40px] rounded-[25px]">
+            <button className="bg-mainYellow text-white py-[12px] px-[40px] rounded-[25px]" onClick={handleSearch}>
               Search
             </button>
           </div>

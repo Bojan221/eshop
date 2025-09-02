@@ -15,6 +15,9 @@ export default {
         'textColor': '#292D32',
         'greyColor': '#B6B6B6',
         'cartBackground':'#E2F4FF',
+      },
+      screens: {
+        'gmd':'900px',
       }
     },
   },
