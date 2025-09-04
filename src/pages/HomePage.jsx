@@ -11,20 +11,22 @@ import LoadingComponent from "../components/LoadingComponent";
 function HomePage() {
 
   const [isGrid, setIsGrid] = useState(true);
+  const [limit, setLimit] = useState(10)
 
   const dispatch = useDispatch();
 
   const { allProducts, isLoading } = useSelector((state) => state.productStore);
 
   useEffect(() => {
-    ProductService.getAllProducts()
+    ProductService.getAllProducts(limit)
       .then((res) => {
         dispatch(saveAllProductsAction(res.data.products));
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [limit]);
 
   return (
+    <div>
     <div className="flex flex-col lg:flex-row gap-[10px] justify-center">
     <CategoryComponent  className="w-[100%]"/>
     <div className="py-[50px] w-[100%] flex flex-col gap-[30px]">
@@ -41,6 +43,13 @@ function HomePage() {
       ) : (
         <div className="mx-auto mt-[50px]"><LoadingComponent/></div>
       )}
+    </div>
+    </div>
+    <div className="flex justify-center items-center">
+      <button 
+      className="bg-mainBlue text-white py-[12px] px-[40px] rounded-[25px] my-[20px] hover:bg-mainYellow transition-all duration-200"
+      onClick={() => setLimit(limit + 10)}>
+        Load more products</button>
     </div>
     </div>
   );
